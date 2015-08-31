@@ -1,4 +1,7 @@
 # unitframe
 Unit test framework
 
-Work in Progress!
+## License
+MIT License. For more information, please refer to [LICENSE](LICENSE)
+
+## Work in Progress!
