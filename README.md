@@ -1,5 +1,5 @@
 # unitframe
-Unit test framework
+Unit testing TDD framework
 
 ## License
 MIT License. For more information, please refer to [LICENSE](LICENSE)
