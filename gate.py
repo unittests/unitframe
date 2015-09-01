@@ -21,9 +21,7 @@ import getpass
 import shutil
 
 # Additional modules
-import filehelp
 import time
-
 
 ###############################################################################
 # Gate Class
@@ -36,6 +34,7 @@ class Gate:
     TYPES = {
         "py":  "python",
         "cc":  "c++"}
+    CPP_OPTIONS = "-std=c++11"
 
     def __init__(self, arg_str=""):
         """ Default constructor """
@@ -45,7 +44,7 @@ class Gate:
         parser = argparse.ArgumentParser(
             description="Gate script")
         parser.add_argument(
-            "path", nargs="?", default=filehelp.gitroot(),
+            "path", nargs="?", default=os.getcwd(),
             help="Optional path")
         self.args = parser.parse_args(self.arg_str.split())
 
@@ -65,7 +64,7 @@ class Gate:
 
             # Search files
             pats = ["\." + ext + "$"]
-            files = filehelp.find_files(self.args.path, patterns=pats)
+            files = find_files(self.args.path, patterns=pats)
 
             for filename in files:
 
@@ -73,7 +72,7 @@ class Gate:
                     break
 
                 # Check that file supports unit tests
-                if not filehelp.search_file("\-ut", filename):
+                if not search_file("\-ut", filename):
                     continue
 
                 print("\nGATE: Running Unit Tests for " + filename)
@@ -83,12 +82,12 @@ class Gate:
                     # Run Python files
                     if os.system("python " + filename + " -ut"):
                         fail = 1
+
                 elif language == "c++":
 
                     # Run C++ files
-                    bin = "/tmp/" + filehelp.filename_strip_ext(filename)
-                    # options = ""
-                    options = "-std=c++11"
+                    bin = "/tmp/" + filename_strip_ext(filename)
+                    options = self.CPP_OPTIONS
                     build = "g++ " + options + " -o " + bin + " " + filename
 
                     if os.system(build):
@@ -108,15 +107,44 @@ class Gate:
 
 
 ###############################################################################
-# Executable code
+# Helping functions
 ###############################################################################
 
 
-def main():
+def search_file(pattern, filename):
+    """ Search file and return only the first match """
+    if not os.path.exists(filename):
+        raise Exception("Can't open file for reading! " + filename)
 
-    # Sandbox
-    sb = Gate(" ".join(sys.argv[1:]))
-    sb.run()
+    fh = open(filename, "r")
+    for line in fh:
+        allmatch = re.findall(pattern, line)
+        if allmatch:
+            fh.close()
+            return allmatch[0]
+
+    fh.close()
+    return None
+
+
+def filename_strip_ext(filename):
+    """ Return file name w/o extension and dirs """
+    base = os.path.basename(filename)
+    # Strip file extension
+    return os.path.splitext(base)[0]
+
+
+def find_files(dir, patterns=[]):
+    result = []
+    for path, dirs, files in os.walk(dir):
+        for file in files:
+            skip = 1 if patterns else 0
+            for pattern in patterns:
+                if re.search(pattern, file):
+                    skip = 0
+            if not skip:
+                result.append(path + "/" + file)
+    return result
 
 ###############################################################################
 # Unit Tests
@@ -137,8 +165,7 @@ class unitTests(unittest.TestCase):
 
         # Check default path is repo root
         d = Gate()
-        gitroot = filehelp.gitroot()
-        self.assertEqual(d.args.path, gitroot)
+        self.assertEqual(d.args.path, os.getcwd())
 
     def test_Gate_class__run(self):
         """ Main execution function """
@@ -151,4 +178,4 @@ class unitTests(unittest.TestCase):
 if __name__ == "__main__":
     if sys.argv[-1] == "-ut":
         unittest.main(argv=[" "])
-    main()
+    Gate(" ".join(sys.argv[1:])).run()

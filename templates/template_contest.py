@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-# __Filename__ -__Contest__ __Class__ program by __User__ __Year__
+# __Filename__ -__Contest__ by __User__ __Year__
 
 import unittest
 import sys
 
 ###############################################################################
-# __Class__ Class
+# __Class__ Class (Main Program)
 ###############################################################################
 
 

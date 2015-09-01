@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-# __Filename__ - <!!! Template !!!> program by __User__ __Year__
+# __Filename__ - __Class__ script by __User__ __Year__
 
 """
-<!!! Template !!!>
+<!!! Script description !!!>
 
 """
 

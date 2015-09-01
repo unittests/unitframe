@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # frame.py - Track project changes and rerun unit-tests
 #
-# Copyright (C) 2013 Sergey Sokolov, License MIT
+# Copyright (C) 2013-2015 Sergey Sokolov, License MIT
 
 """
 Opens editor and xterm window and runs your self executable script after each
@@ -33,20 +33,22 @@ class Frame:
     """ Monitors all updates to dependent files and reruns the project """
 
     script_dir = os.path.dirname(os.path.realpath(__file__))
+    checks_dir = os.path.join(script_dir, "checks")
+    templates_dir = os.path.join(script_dir, "templates")
 
     IS_WIN = (os.name == "nt")
     CMD_CLEAR = "cls" if IS_WIN else "clear"
-    CMD_PEP8 = os.path.join(script_dir, "pep8.py")
+    CMD_PEP8 = os.path.join(checks_dir, "pep8.py")
     CMD_SEP = " & " if IS_WIN else " ; "
     CMD_EDITOR = "%EDITOR%" if IS_WIN else "$EDITOR"
     UPDATE_PERIOD = .5
     XTERM_OPT = "+aw -bg darkgreen -fg white -geometry 70x20+0+200"
     TYPES = {
-        "py":  ("python",  "py", "sample.py",     ""),
-        "i":   ("python",  "py", "sample_i.py",   ""),
-        "cf":  ("python",  "py", "sample_cf.py",  "codeforces"),
-        "cc":  ("c++",     "cc", "sample_i.cc",   ""),
-        "cfc": ("c++",     "cc", "sample_cf.cc",  "codeforces")}
+        "s":   ("python",  "py", "template_script.py",  ""),
+        "p":   ("python",  "py", "template_program.py", ""),
+        "pc":  ("c++",     "cc", "template_program.cc", ""),
+        "cf":  ("python",  "py", "template_contest.py", "contest"),
+        "cfc": ("c++",     "cc", "template_contest.cc", "contest")}
     CPP_OPTIONS = "-std=c++11"
     CPP_DEBUG_OPTIONS = (
         "-Wall -Wextra -pedantic -O2 -Wshadow -Wformat=2 " +
@@ -79,11 +81,11 @@ class Frame:
         self.args = parser.parse_args(self.arg_str.split())
 
         self.cmd = ""
-        self.cf_contest = ""
+        self.c_contest = ""
 
-        # Default project type
+        # Default project type is a python program
         if not self.args.type:
-            self.args.type = "py"
+            self.args.type = "p"
 
         # Extracting project type from the file extension
         ext = filename_ext(self.args.proj)
@@ -103,12 +105,12 @@ class Frame:
             self.args.proj += "." + self.ext
 
         # Extract contest name from the project
-        if self.category == "codeforces":
+        if self.category == "contest":
             proj_name = filename_strip_ext(self.args.proj)
             allmatch = re.match("^([^_]*)_(.*)$", proj_name)
             if allmatch:
-                self.cf_contest = allmatch.group(1)
-                self.cf_project = allmatch.group(2)
+                self.c_contest = allmatch.group(1)
+                self.c_project = allmatch.group(2)
             else:
                 raise Exception("Expected contest name prefix")
 
@@ -117,14 +119,13 @@ class Frame:
         if os.path.exists(filename):
             return 0
 
-        template_file = self.script_dir + "/"
-        template_file += self.template
+        template_file = os.path.join(self.templates_dir, self.template)
 
         proj_name = filename_strip_ext(filename)
 
-        # Special project name for Codeforces
-        if self.category == "codeforces":
-            proj_name = self.cf_project
+        # Special project name for Contests
+        if self.category == "contest":
+            proj_name = self.c_project
 
         os.system(
             "cp " + os.path.normpath(template_file) + " " +
@@ -143,11 +144,11 @@ class Frame:
         replace_file("__User__", user, filename)
 
         contest = ""
-        if self.category == "codeforces":
+        if self.category == "contest":
             contest = " Codeforces.com/problemset/problem/"
-            m = re.search("(\d+)(\w)", self.cf_contest)
+            m = re.search("(\d+)(\w)", self.c_contest)
             if not m:
-                raise Exception("Wrong contest format " + self.cf_contest)
+                raise Exception("Wrong contest format " + self.c_contest)
             contest += m.group(1) + "/" + m.group(2)
         replace_file("__Contest__", contest, filename)
 
@@ -221,7 +222,7 @@ class Frame:
             os.system(self.cmd)
 
 ###############################################################################
-# Executable code
+# Helping functions
 ###############################################################################
 
 
@@ -270,13 +271,6 @@ def files_are_modified(filenames, lastupdate):
             return True
     return False
 
-
-def main():
-
-    # Sandbox
-    sb = Frame(" ".join(sys.argv[1:]))
-    sb.run()
-
 ###############################################################################
 # Unit Tests
 ###############################################################################
@@ -307,7 +301,7 @@ class unitTests(unittest.TestCase):
         """ Create new project if file does not exists, make sure that py file
         extension is not added twice"""
         py_file = self.tmp_file + ".py"
-        f = Frame(py_file + " -type py")
+        f = Frame(py_file + " -type s")
         self.assertEqual(f.create_new_project(f.args.proj), 1)
         proj_name = filename_strip_ext(self.tmp_file)
         self.assertEqual(
@@ -318,13 +312,13 @@ class unitTests(unittest.TestCase):
         # Project already exists
         self.assertEqual(f.create_new_project(f.args.proj), 0)
 
-        # Make sure prefix is stripped from file name for codeforces projects
+        # Make sure prefix is stripped from file name for contest projects
         pref = "552"
         test_file = self.test_area + "/" + pref + "_project"
         py_file = test_file + ".py"
         f = Frame(test_file + " -type cf")
-        self.assertEqual(f.cf_contest, "552")
-        self.assertEqual(f.cf_project, "project")
+        self.assertEqual(f.c_contest, "552")
+        self.assertEqual(f.c_project, "project")
         self.assertEqual(f.create_new_project(f.args.proj), 1)
         proj_name = filename_strip_ext(self.tmp_file)
         self.assertEqual(
@@ -335,8 +329,8 @@ class unitTests(unittest.TestCase):
         # Code forces C++ project
         cpp_file = test_file + ".cc"
         f = Frame(test_file + " -type cfc")
-        self.assertEqual(f.cf_contest, "552")
-        self.assertEqual(f.cf_project, "project")
+        self.assertEqual(f.c_contest, "552")
+        self.assertEqual(f.c_project, "project")
         self.assertEqual(f.create_new_project(f.args.proj), 1)
         self.assertEqual(
             os.system(
@@ -374,4 +368,4 @@ class unitTests(unittest.TestCase):
 if __name__ == '__main__':
     if sys.argv[-1] == "-ut":
         unittest.main(argv=[" "])
-    main()
+    Frame(" ".join(sys.argv[1:])).run()

@@ -1,4 +1,4 @@
-// __Filename__ - __Class__ program by __User__ __Year__
+// __Filename__ -__Contest__ by __User__ __Year__
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -44,10 +44,38 @@ class Cppunit { public:
 
 class __Class__ { public:
 
+    typedef long long ll;
+    ll n, m;
+    vector <ll> numa, numb, nums;
+
     __Class__(){
 
+        // Reading single elements
+        cin >> n;
+        cin >> m;
+
+        // Reading multiple lines of pair
+        for(int i=0; i<n; i++) {
+            ll a; cin >> a; numa.push_back(a);
+            ll b; cin >> b; numb.push_back(b);
+        }
+
+        // Reading a single line of multiple elements
+        for(int i=0; i<m; i++) {
+            ll s; cin >> s; nums.push_back(s);
+        }
     }
 
+    string calculate(){
+
+        // Result calculation
+        ll result = 0;
+
+        // Converting result to string
+        ostringstream resstr;
+        resstr << result;
+        return resstr.str();
+    }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -61,12 +89,68 @@ class MyCppunit: public Cppunit {
 
     void single_test() {
 
+        // Constructor test
+        string test = "2 3\n1 2\n3 4\n1 2 3 4";
+        test_cin(test);
         d = new __Class__;
-        CHECK(1, 1);
+        CHECK(d->n, 2);
+        CHECK(d->m, 3);
+        CHECK(d->numa[0], 1);
+        CHECK(d->numb[0], 2);
+        CHECK(d->nums[0], 1);
+
+        // Sample test
+        test_cin(test);
+        //CHECKS((new __Class__)->calculate(), "0");
+
+        // Sample test
+        test_cin("");
+        //CHECKS((new __Class__)->calculate(), "0");
+
+        // Sample test
+        test_cin("");
+        //CHECKS((new __Class__)->calculate(), "0");
+
+        // My test
+        test_cin("");
+        //CHECKS((new __Class__)->calculate(), "0");
+
+        // Time limit test
+        //time_limit_test(2000);
+    }
+
+    void time_limit_test(int nmax){
+
+        int mmax = nmax;
+        ostringstream stest;
+
+        // Random inputs
+        stest << nmax << " " << mmax << endl;
+        for(int i = 0; i < nmax; i++) stest << i << " " << i+1 << endl;
+        for(int i = 0; i < mmax; i++) stest << rand() % 40 << " ";
+
+        // Run the test
+        double start = dclock();
+        test_cin(stest.str());
+        d = new __Class__;
+        double calc = dclock();
+        d->calculate();
+        double stop = dclock();
+        cout << endl << "Timelimit Test: " << stop - start << "s (init ";
+        cout << calc - start << "s calc " << stop - calc << "s)" << endl;
     }
 };
 
-int main() {
-    return (new MyCppunit)->run();
+
+int main(int argc, char *argv[]) {
+
+    // Faster cin and cout
+    ios_base::sync_with_stdio(0);cin.tie(0);
+
+    if (argc > 1 && !strcmp(argv[1], "-ut"))
+        return (new MyCppunit)->run();
+
+    cout << (new __Class__)->calculate() << endl;
+    return 0;
 }
 
