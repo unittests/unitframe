@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-# frame.py - Track project changes and rerun unit-tests
+# unitframe.py - Runs unit tests in a loop
 #
 # Copyright (C) 2013-2015 Sergey Sokolov, License MIT
 
 """
-Opens editor and xterm window and runs your self executable script after each
-modification.
+Will open editor and new xterm window for unit tests to be run in a loop.
+Unit tests will be run each time project is updated and saved..
 
 """
 
@@ -25,11 +25,11 @@ import time
 
 
 ###############################################################################
-# Frame Class
+# Unitframe Class
 ###############################################################################
 
 
-class Frame:
+class Unitframe:
     """ Monitors all updates to dependent files and reruns the project """
 
     # Enums
@@ -63,7 +63,7 @@ class Frame:
         # Argument parsing
         self.arg_str = arg_str
         parser = argparse.ArgumentParser(
-            description="Frame script")
+            description="Unitframe script")
         parser.add_argument(
             "proj", help="Project name (required argument)")
         parser.add_argument(
@@ -182,7 +182,7 @@ class Frame:
                 self.cmd += editor_cmd + self.CMD_SEP + "START " + frame_cmd
             else:
                 self.cmd += (
-                    "xterm " + Frame.CFG_X_XTERM_OPT + " -T '" + filename +
+                    "xterm " + self.CFG_X_XTERM_OPT + " -T '" + filename +
                     "' -e \"" + editor_cmd + " &; " + frame_cmd + "; csh\"&")
 
     def run(self, test=False):
@@ -297,20 +297,20 @@ class unitTests(unittest.TestCase):
     def setUp(self):
         os.makedirs(self.test_area, exist_ok=True)
 
-    def test_Frame_class__basic_functions(self):
+    def test_Unitframe_class__basic_functions(self):
         """ Basic functions """
         proj = self.tmp_file + "_new"
         proj_py = proj + ".py"
-        f = Frame(proj)
+        f = Unitframe(proj)
         self.assertEqual(f.args.proj, proj_py)
         f.run(test=True)
         os.remove(proj_py)
 
-    def test_Frame_class__create_new_project(self):
+    def test_Unitframe_class__create_new_project(self):
         """ Create new project if file does not exists, make sure that py file
         extension is not added twice"""
         py_file = self.tmp_file + ".py"
-        f = Frame(py_file + " -type s")
+        f = Unitframe(py_file + " -type s")
         f.create_new_project(f.args.proj)
         proj_name = filename_strip_ext(self.tmp_file)
         self.assertEqual(
@@ -322,7 +322,7 @@ class unitTests(unittest.TestCase):
         pref = "552"
         test_file = self.test_area + "/" + pref + "_project"
         py_file = test_file + ".py"
-        f = Frame(test_file + " -type cf")
+        f = Unitframe(test_file + " -type cf")
         f.create_new_project(f.args.proj)
         self.assertEqual(f.cont_num, "552")
         self.assertEqual(f.cont_project, "project")
@@ -334,7 +334,7 @@ class unitTests(unittest.TestCase):
 
         # Code forces C++ project
         cpp_file = test_file + ".cc"
-        f = Frame(test_file + " -type cfc")
+        f = Unitframe(test_file + " -type cfc")
         f.create_new_project(f.args.proj)
         self.assertEqual(f.cont_num, "552")
         self.assertEqual(f.cont_project, "project")
@@ -343,11 +343,11 @@ class unitTests(unittest.TestCase):
                 "cat " + os.path.normpath(cpp_file) +
                 "| grep \"namespace std\" -q"), 0)
 
-    def test_Frame_class__set_cmd(self):
+    def test_Unitframe_class__set_cmd(self):
         """ Create watcher cmd """
         self.maxDiff = None
         proj = self.tmp_file + "_cmd"
-        f = Frame(proj + " -arg arg -pre pre")
+        f = Unitframe(proj + " -arg arg -pre pre")
         f.set_cmd(proj)
         if f.IS_WIN:
             self.assertEqual(
@@ -355,13 +355,13 @@ class unitTests(unittest.TestCase):
                 " " + proj + " -arg arg -pre pre -xterm")
         else:
             self.assertEqual(
-                f.cmd, "xterm " + Frame.XTERM_OPT + " -T '" + proj +
+                f.cmd, "xterm " + f.XTERM_OPT + " -T '" + proj +
                 "' -e \"$EDITOR " + proj + " &; " + sys.argv[0] +
                 " " + proj + " -arg arg -pre pre" +
                 " -xterm; csh\"&")
 
         proj = self.tmp_file + "_xcmd"
-        f = Frame(proj + " -x -arg arg -pre pre")
+        f = Unitframe(proj + " -x -arg arg -pre pre")
         f.set_cmd(proj)
         self.assertEqual(
             f.cmd, os.path.join(f.checks_dir, "pep8.py") + " " + proj +
@@ -374,4 +374,4 @@ class unitTests(unittest.TestCase):
 if __name__ == '__main__':
     if sys.argv[-1] == "-ut":
         unittest.main(argv=[" "])
-    Frame(" ".join(sys.argv[1:])).run()
+    Unitframe(" ".join(sys.argv[1:])).run()

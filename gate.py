@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-# gate.py - Searches for and runs all repo gating tests
+# gate.py - User's commit gating script
 #
 # Copyright (C) 2015 Sergey Sokolov, License MIT
 
 """
-Repo gating test runner. Searches for all python files containing unit tests
-and executes all tests in order.
-
+Searches for all files supporting unit testing (-ut option) in the specified
+directory and runs them one by one. All tests must pass for gate script to
+exit normally.
 """
 
 # Standard modules
@@ -31,10 +31,12 @@ import time
 class Gate:
     """ Gate representation """
 
-    TYPES = {
-        "py":  "python",
-        "cc":  "c++"}
-    CPP_OPTIONS = "-std=c++11"
+    # Enums
+    PYTHON, CPP, EXEC = range(3)
+
+    # Configuration
+    CFG_CPP_OPTS = "-std=c++11"
+    CFG_EXTS = {"py": PYTHON, "cc": CPP, "": EXEC}
 
     def __init__(self, arg_str=""):
         """ Default constructor """
@@ -59,8 +61,12 @@ class Gate:
 
         fail = 0
 
-        for ext in self.TYPES.keys():
-            language = self.TYPES[ext]
+        for ext in reversed(sorted(self.CFG_EXTS.keys())):
+            language = self.CFG_EXTS[ext]
+
+            # NOTE: Binary files are not supported
+            if language == self.EXEC:
+                continue
 
             # Search files
             pats = ["\." + ext + "$"]
@@ -77,17 +83,17 @@ class Gate:
 
                 print("\nGATE: Running Unit Tests for " + filename)
 
-                if language == "python":
+                if language == self.PYTHON:
 
                     # Run Python files
                     if os.system("python " + filename + " -ut"):
                         fail = 1
 
-                elif language == "c++":
+                elif language == self.CPP:
 
                     # Run C++ files
                     bin = "/tmp/" + filename_strip_ext(filename)
-                    options = self.CPP_OPTIONS
+                    options = self.CFG_CPP_OPTS
                     build = "g++ " + options + " -o " + bin + " " + filename
 
                     if os.system(build):
