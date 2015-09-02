@@ -1,5 +1,5 @@
 # unitframe
-Unit testing TDD framework for source code development and verification.
+Unit testing TDD framework for rapid source code development and verification.
 
 Main components:
 - [unitframe.py](unitframe.py)  - Runs unit tests in a loop
