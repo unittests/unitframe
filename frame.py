@@ -32,28 +32,30 @@ import time
 class Frame:
     """ Monitors all updates to dependent files and reruns the project """
 
-    script_dir = os.path.dirname(os.path.realpath(__file__))
-    checks_dir = os.path.join(script_dir, "checks")
-    templates_dir = os.path.join(script_dir, "templates")
+    # Enums
+    PYTHON, CPP, EXEC = range(3)
 
-    IS_WIN = (os.name == "nt")
-    CMD_CLEAR = "cls" if IS_WIN else "clear"
-    CMD_PEP8 = os.path.join(checks_dir, "pep8.py")
-    CMD_SEP = " & " if IS_WIN else " ; "
-    CMD_EDITOR = "%EDITOR%" if IS_WIN else "$EDITOR"
-    UPDATE_PERIOD = .5
-    XTERM_OPT = "+aw -bg darkgreen -fg white -geometry 70x20+0+200"
-    TYPES = {
-        "s":   ("python",  "py", "template_script.py",  ""),
-        "p":   ("python",  "py", "template_program.py", ""),
-        "pc":  ("c++",     "cc", "template_program.cc", ""),
-        "cf":  ("python",  "py", "template_contest.py", "contest"),
-        "cfc": ("c++",     "cc", "template_contest.cc", "contest")}
-    CPP_OPTIONS = "-std=c++11"
-    CPP_DEBUG_OPTIONS = (
+    # Configuration
+    CFG_UPDATE_PERIOD = .5
+    CFG_X_XTERM_OPT = "+aw -bg darkgreen -fg white -geometry 70x20+0+200"
+    CFG_CPP_OPTS = "-std=c++11"
+    CFG_CPP_DEBUG_OPTS = (
         "-Wall -Wextra -pedantic -O2 -Wshadow -Wformat=2 " +
         "-Wfloat-equal -Wconversion -Wlogical-op -Wcast-qual -Wcast-align " +
         "-D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2")
+    CFG_EXTS = {"py": PYTHON, "cc": CPP, "": EXEC}
+    CFG_TYPES = {
+        "s":   "template_script.py",
+        "p":   "template_program.py",
+        "pc":  "template_program.cc",
+        "cf":  "template_contest.py",
+        "cfc": "template_contest.cc"}
+
+    # Command constants
+    IS_WIN = (os.name == "nt")
+    CMD_CLEAR = "cls" if IS_WIN else "clear"
+    CMD_SEP = " & " if IS_WIN else " ; "
+    CMD_EDITOR = "%EDITOR%" if IS_WIN else "$EDITOR"
 
     def __init__(self, arg_str=""):
         """ Default constructor """
@@ -65,13 +67,12 @@ class Frame:
         parser.add_argument(
             "proj", help="Project name (required argument)")
         parser.add_argument(
-            "-type", action="store", default="",
-            help="New project type: " + ", ".join(sorted(self.TYPES.keys())))
+            "-type", action="store", default="p",
+            help="New project template (default p): " +
+            ", ".join(sorted(
+                [v + " " + self.CFG_TYPES[v] for v in self.CFG_TYPES])))
         parser.add_argument(
             "-xterm", action="store_true", default="", help="Xterm mode")
-        parser.add_argument(
-            "-new", action="store_true", default="",
-            help="Create a new Project")
         parser.add_argument(
             "-pre", action="store", default="",
             help="Run a Programm on top of the Project")
@@ -80,56 +81,54 @@ class Frame:
             help="Passing argument to the Project")
         self.args = parser.parse_args(self.arg_str.split())
 
-        self.cmd = ""
-        self.c_contest = ""
+        # Calculate paths
+        self.script_dir = os.path.dirname(os.path.realpath(__file__))
+        self.checks_dir = os.path.join(self.script_dir, "checks")
+        self.templates_dir = os.path.join(self.script_dir, "templates")
 
-        # Default project type is a python program
-        if not self.args.type:
-            self.args.type = "p"
+        # New project or existing
+        self.is_new = not os.path.exists(self.args.proj)
 
-        # Extracting project type from the file extension
-        ext = filename_ext(self.args.proj)
-        if ext in self.TYPES.keys():
-            self.args.type = ext
+        # Add extensions for new projects if missing
+        if self.is_new:
+            ext = filename_ext(self.CFG_TYPES[self.args.type])
+            if not re.match(".*\." + ext + "$", self.args.proj):
+                self.args.proj += "." + ext
 
-        # Check resulting type
-        if self.args.type not in self.TYPES.keys():
-            raise Exception("Project type is not supported! ", self.args.type)
-
-        # Extract type details from hash
-        type = self.TYPES[self.args.type]
-        (self.language, self.ext, self.template, self.category) = type
-
-        # Add extension for various project types
-        if not re.match(".*\." + self.ext + "$", self.args.proj):
-            self.args.proj += "." + self.ext
-
-        # Extract contest name from the project
-        if self.category == "contest":
-            proj_name = filename_strip_ext(self.args.proj)
-            allmatch = re.match("^([^_]*)_(.*)$", proj_name)
-            if allmatch:
-                self.c_contest = allmatch.group(1)
-                self.c_project = allmatch.group(2)
-            else:
-                raise Exception("Expected contest name prefix")
+        # Project language and extension
+        self.language = self.CFG_EXTS[filename_ext(self.args.proj)]
 
     def create_new_project(self, filename):
         """ Create a new project file and replace """
-        if os.path.exists(filename):
-            return 0
 
-        template_file = os.path.join(self.templates_dir, self.template)
-
+        # Extract template info from hash
+        template = self.CFG_TYPES[self.args.type]
+        template_file = os.path.join(self.templates_dir, template)
         proj_name = filename_strip_ext(filename)
-
-        # Special project name for Contests
-        if self.category == "contest":
-            proj_name = self.c_project
 
         os.system(
             "cp " + os.path.normpath(template_file) + " " +
             os.path.normpath(filename))
+
+        # Contest replacement
+        # NOTE: Needs to happen before Class replacement
+        if search_file("__Contest__", filename):
+
+            allmatch = re.match("^([^_]*)_(.*)$", proj_name)
+            if allmatch:
+                self.cont_num = allmatch.group(1)
+                self.cont_project = allmatch.group(2)
+            else:
+                raise Exception("Expected contest num as a prefix")
+
+            proj_name = self.cont_project
+
+            contest = " Codeforces.com/problemset/problem/"
+            m = re.search("(\d+)(\w)", self.cont_num)
+            if not m:
+                raise Exception("Wrong contest format " + self.cont_num)
+            contest += m.group(1) + "/" + m.group(2)
+            replace_file("__Contest__", contest, filename)
 
         replace_file("__Filename__", filename, filename)
         replace_file("__Class__", proj_name.capitalize(), filename)
@@ -143,26 +142,19 @@ class Frame:
         user = getpass.getuser().capitalize()
         replace_file("__User__", user, filename)
 
-        contest = ""
-        if self.category == "contest":
-            contest = " Codeforces.com/problemset/problem/"
-            m = re.search("(\d+)(\w)", self.c_contest)
-            if not m:
-                raise Exception("Wrong contest format " + self.c_contest)
-            contest += m.group(1) + "/" + m.group(2)
-        replace_file("__Contest__", contest, filename)
-
-        return 1
-
     def set_cmd(self, filename):
         """ Program a cmd line for a watcher function """
+        self.cmd = ""
         if self.args.xterm:
             prog_cmd = filename
 
             # Additional commands for python
-            if self.language == "python":
+            if self.language == self.PYTHON:
+
                 # Run PEP8 for python scripts
-                self.cmd += self.CMD_PEP8 + " " + filename + self.CMD_SEP
+                self.cmd += os.path.join(self.checks_dir, "pep8.py")
+                self.cmd += " " + filename + self.CMD_SEP
+
                 # For Win frame needs to be run by python program
                 if self.IS_WIN:
                     prog_cmd = "python " + prog_cmd
@@ -170,10 +162,10 @@ class Frame:
                 prog_cmd += " -ut"
 
             # Additional commands for C++
-            if self.language == "c++":
+            if self.language == self.CPP:
                 binary = "/tmp/" + filename_strip_ext(self.args.proj)
                 binary_exe = os.path.normpath(binary + ".exe")
-                options = self.CPP_OPTIONS + " " + self.CPP_DEBUG_OPTIONS
+                options = self.CFG_CPP_OPTS + " " + self.CFG_CPP_DEBUG_OPTS
                 prog_cmd = "rm -f " + binary_exe + self.CMD_SEP
                 prog_cmd += "g++ " + options + " -o " + binary + " "
                 prog_cmd += filename + self.CMD_SEP
@@ -190,15 +182,16 @@ class Frame:
                 self.cmd += editor_cmd + self.CMD_SEP + "START " + frame_cmd
             else:
                 self.cmd += (
-                    "xterm " + Frame.XTERM_OPT + " -T '" + filename +
+                    "xterm " + Frame.CFG_X_XTERM_OPT + " -T '" + filename +
                     "' -e \"" + editor_cmd + " &; " + frame_cmd + "; csh\"&")
 
     def run(self, test=False):
         """ Main execution function """
 
-        if not os.path.exists(self.args.proj):
+        if self.is_new:
             if not test:
-                print("Can't find project. Created a NEW one!")
+                print("Can't find project " + self.args.proj)
+                print("Created a NEW one!")
             self.create_new_project(self.args.proj)
 
         self.set_cmd(self.args.proj)
@@ -216,7 +209,7 @@ class Frame:
                     ftime = datetime.datetime.now().strftime('%H:%M:%S')
                     print(ftime + " Running " + self.args.proj)
                     os.system(self.cmd)
-                time.sleep(self.UPDATE_PERIOD)
+                time.sleep(self.CFG_UPDATE_PERIOD)
         else:
             print("PROJ : ", self.args.proj)
             os.system(self.cmd)
@@ -224,6 +217,22 @@ class Frame:
 ###############################################################################
 # Helping functions
 ###############################################################################
+
+
+def search_file(pattern, filename):
+    """ Search file and return only the first match """
+    if not os.path.exists(filename):
+        raise Exception("Can't open file for reading! " + filename)
+
+    fh = open(filename, "r")
+    for line in fh:
+        allmatch = re.findall(pattern, line)
+        if allmatch:
+            fh.close()
+            return allmatch[0]
+
+    fh.close()
+    return None
 
 
 def replace_file(pattern, substr, filename):
@@ -292,7 +301,7 @@ class unitTests(unittest.TestCase):
         """ Basic functions """
         proj = self.tmp_file + "_new"
         proj_py = proj + ".py"
-        f = Frame(proj + " -new")
+        f = Frame(proj)
         self.assertEqual(f.args.proj, proj_py)
         f.run(test=True)
         os.remove(proj_py)
@@ -302,24 +311,21 @@ class unitTests(unittest.TestCase):
         extension is not added twice"""
         py_file = self.tmp_file + ".py"
         f = Frame(py_file + " -type s")
-        self.assertEqual(f.create_new_project(f.args.proj), 1)
+        f.create_new_project(f.args.proj)
         proj_name = filename_strip_ext(self.tmp_file)
         self.assertEqual(
             os.system(
                 "cat " + os.path.normpath(py_file) + "| grep " +
                 proj_name + " -q"), 0)
 
-        # Project already exists
-        self.assertEqual(f.create_new_project(f.args.proj), 0)
-
         # Make sure prefix is stripped from file name for contest projects
         pref = "552"
         test_file = self.test_area + "/" + pref + "_project"
         py_file = test_file + ".py"
         f = Frame(test_file + " -type cf")
-        self.assertEqual(f.c_contest, "552")
-        self.assertEqual(f.c_project, "project")
-        self.assertEqual(f.create_new_project(f.args.proj), 1)
+        f.create_new_project(f.args.proj)
+        self.assertEqual(f.cont_num, "552")
+        self.assertEqual(f.cont_project, "project")
         proj_name = filename_strip_ext(self.tmp_file)
         self.assertEqual(
             os.system(
@@ -329,9 +335,9 @@ class unitTests(unittest.TestCase):
         # Code forces C++ project
         cpp_file = test_file + ".cc"
         f = Frame(test_file + " -type cfc")
-        self.assertEqual(f.c_contest, "552")
-        self.assertEqual(f.c_project, "project")
-        self.assertEqual(f.create_new_project(f.args.proj), 1)
+        f.create_new_project(f.args.proj)
+        self.assertEqual(f.cont_num, "552")
+        self.assertEqual(f.cont_project, "project")
         self.assertEqual(
             os.system(
                 "cat " + os.path.normpath(cpp_file) +
@@ -341,25 +347,25 @@ class unitTests(unittest.TestCase):
         """ Create watcher cmd """
         self.maxDiff = None
         proj = self.tmp_file + "_cmd"
-        f = Frame(proj + " -new -arg arg -pre pre")
+        f = Frame(proj + " -arg arg -pre pre")
         f.set_cmd(proj)
         if f.IS_WIN:
             self.assertEqual(
                 f.cmd, "%EDITOR% " + proj + " & START python " + sys.argv[0] +
-                " " + proj + " -new -arg arg -pre pre -xterm")
+                " " + proj + " -arg arg -pre pre -xterm")
         else:
             self.assertEqual(
                 f.cmd, "xterm " + Frame.XTERM_OPT + " -T '" + proj +
                 "' -e \"$EDITOR " + proj + " &; " + sys.argv[0] +
-                " " + proj + " -new -arg arg -pre pre" +
+                " " + proj + " -arg arg -pre pre" +
                 " -xterm; csh\"&")
 
         proj = self.tmp_file + "_xcmd"
-        f = Frame(proj + " -new -x -arg arg -pre pre")
+        f = Frame(proj + " -x -arg arg -pre pre")
         f.set_cmd(proj)
         self.assertEqual(
-            f.cmd, f.CMD_PEP8 + " " + proj + f.CMD_SEP + "pre " +
-            ("python " if f.IS_WIN else "") +
+            f.cmd, os.path.join(f.checks_dir, "pep8.py") + " " + proj +
+            f.CMD_SEP + "pre " + ("python " if f.IS_WIN else "") +
             proj + " -ut arg")
 
     def test_xcleanup(self):
