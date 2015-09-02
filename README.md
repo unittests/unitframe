@@ -1,5 +1,6 @@
 # unitframe
-Unit testing TDD framework for rapid source code development and verification.
+Unit testing TDD framework for rapid source code development and verification. 
+It was written primarily for Python, but C++ is also supported.
 
 Main components:
 - [unitframe.py](unitframe.py)  - Runs unit tests in a loop
@@ -14,12 +15,12 @@ MIT License. For more information, please refer to [LICENSE](LICENSE)
 Each program has to support `-ut` command line switch which is used to enable unit testing mode of a program (always enabled is okay).
 
 Programming languages supported: 
-- C++ (Windows MinGW only)
 - Python (Win/Linux)
+- C++ (Windows MinGW only)
 
 It is recommended to use following unit testing libraries:
-- C++ - [Cppunit](http://cppunit.github.io/cppunit/)
 - Python - [Unittest](https://docs.python.org/3/library/unittest.html) native library
+- C++ - [Cppunit](http://cppunit.github.io/cppunit/)
 
 ## unitframe.py - Runs unit tests in a loop
 Will open editor and new xterm window for unit tests to be run in a loop. Unit tests will be run each time project is updated and saved.
