@@ -14,10 +14,10 @@ MIT License. For more information, please refer to [LICENSE](LICENSE)
 Each program has to support `-ut` command line switch which is used to enable unit testing mode of a program (always enabled is okay).
 
 Programming languages supported: 
-- Python (Win/Linux)
+- Python (Windows/Linux)
 - C++ (Windows MinGW only)
 
-It is recommended to use following unit testing libraries:
+It is recommended to use following unit testing libraries with Unitframe:
 - Python - [Unittest](https://docs.python.org/3/library/unittest.html) native library
 - C++ - [Cppunit](http://cppunit.github.io/cppunit/)
 
