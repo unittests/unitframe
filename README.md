@@ -1,4 +1,4 @@
-# unitframe
+# UnitFrame
 Unit testing TDD framework for rapid source code development and verification. It was written primarily for Python programming language, but C++ is also supported.
 
 Components:
@@ -17,7 +17,7 @@ Programming languages supported:
 - Python (Windows/Linux)
 - C++ (Windows MinGW only)
 
-It is recommended to use following unit testing libraries with Unitframe:
+It is recommended to use following unit testing libraries with UnitFrame:
 - Python - [Unittest](https://docs.python.org/3/library/unittest.html) native library
 - C++ - [Cppunit](http://cppunit.github.io/cppunit/)
 
@@ -27,7 +27,7 @@ Will open up default editor and new xterm window for unit tests to be run in a l
 ```
 usage: unitframe.py [-h] [-type TYPE] [-xterm] [-pre PRE] [-args ARGS] proj
 
-Unitframe script
+UnitFrame script
 
 positional arguments:
   proj        Project name (required argument)
@@ -42,7 +42,7 @@ optional arguments:
   -args ARGS  Passing argument to the Project
 ```
 
-Unitframe launching GVIM and terminal window with one [Cppunit](http://cppunit.github.io/cppunit/) unit test failing after executing the following command:
+UnitFrame launching GVIM and terminal window with one [Cppunit](http://cppunit.github.io/cppunit/) unit test failing after executing the following command:
 
 `> unitframe 574D_blocks.cc`
 
