@@ -14,7 +14,7 @@ MIT License. For more information, please refer to [LICENSE](LICENSE)
 Each program has to support `-ut` command line switch which is used to enable unit testing mode of a program (always enabled is okay).
 
 Programming languages supported: 
-- C++ (Win/Linux)
+- C++ (Windows MinGW only)
 - Python (Win/Linux)
 
 It is recommended to use following unit testing libraries:
