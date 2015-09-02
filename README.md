@@ -11,11 +11,13 @@ Main components:
 MIT License. For more information, please refer to [LICENSE](LICENSE)
 
 ## Usage requirements
-Each program has to support '-ut' command line switch which will enable unit testing mode of a program (always enabled is okay).
+Each program has to support `-ut` command line switch which is used to enable unit testing mode of a program (always enabled is okay).
 
-Programming languages supported: C++ (Win/Linux), Python (Win/Linux)
+Programming languages supported: 
+- C++ (Win/Linux)
+- Python (Win/Linux)
 
-It is recommended to use following unit testing ibraries:
+It is recommended to use following unit testing libraries:
 - C++ - [Cppunit](http://cppunit.github.io/cppunit/)
 - Python - [Unittest](https://docs.python.org/3/library/unittest.html) native library
 
@@ -41,6 +43,7 @@ optional arguments:
 ```
 
 Unitframe launching GVIM and terminal window with one [Cppunit](http://cppunit.github.io/cppunit/) unit test failing after executing the following command:
+
 `> unitframe 574D_blocks.cc`
 
 ![blocks](https://cloud.githubusercontent.com/assets/3139960/9644637/19b1065c-517c-11e5-8c73-ed636bbfc5bd.jpg)
@@ -67,6 +70,6 @@ GATE: ALL TESTS PASSED!
 ## Templates for new projects
 
 New project templates available:
-- Script `-type c` ([Python](templates/template_script.py))
-- Program `-type p/pc` ([Python](templates/template_program.py)/[C++](templates/template_program.cc))
-- Contest solution `-type cf/cfc` ([Python](templates/template_contest.py)/[C++](templates/template_contest.cc))
+- Basic script template `-type c` ([Python](templates/template_script.py))
+- Program teplate `-type p/pc` ([Python](templates/template_program.py)/[C++](templates/template_program.cc))
+- Contest solution template `-type cf/cfc` ([Python](templates/template_contest.py)/[C++](templates/template_contest.cc))
