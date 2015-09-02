@@ -17,7 +17,7 @@ Programming languages supported: C++ (Win/Linux), Python (Win/Linux)
 
 It is recommended to use following unit testing ibraries:
 - C++ - [Cppunit](http://cppunit.github.io/cppunit/)
-- Python - Unittest
+- Python - [Unittest](https://docs.python.org/3/library/unittest.html) native library
 
 ## unitframe.py - Runs unit tests in a loop
 Will open editor and new xterm window for unit tests to be run in a loop. Unit tests will be run each time project is updated and saved.
