@@ -1,7 +1,5 @@
 # unitframe
-Unit testing TDD framework for rapid source code development and verification. 
-
-It was written primarily for Python, but C++ is also supported.
+Unit testing TDD framework for rapid source code development and verification. It was written primarily for Python programming language, but C++ is also supported.
 
 Main components:
 - [unitframe.py](unitframe.py)  - Runs unit tests in a loop
