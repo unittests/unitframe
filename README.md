@@ -1,9 +1,9 @@
 # unitframe
 Unit testing TDD framework for rapid source code development and verification. It was written primarily for Python programming language, but C++ is also supported.
 
-Main components:
-- [unitframe.py](unitframe.py)  - Runs unit tests in a loop
-- [gate.py](gate.py)            - User commit gating script
+Components:
+- [unitframe.py](unitframe.py)  - Main tool, runs unit tests in a loop
+- [gate.py](gate.py)            - User's commit gating tool
 - [templates/](templates)       - Templates directory for new projects/scripts 
 - [checks/](checks)             - Source code lint checks (currently only Pep8 for Python)
 
@@ -22,7 +22,7 @@ It is recommended to use following unit testing libraries:
 - C++ - [Cppunit](http://cppunit.github.io/cppunit/)
 
 ## unitframe.py - Runs unit tests in a loop
-Will open editor and new xterm window for unit tests to be run in a loop. Unit tests will be run each time project is updated and saved.
+Will open up default editor and new xterm window for unit tests to be run in a loop. Unit tests will be run each time the project is updated and saved.
 
 ```
 usage: unitframe.py [-h] [-type TYPE] [-xterm] [-pre PRE] [-args ARGS] proj
