@@ -4,8 +4,8 @@
 # Copyright (C) 2013-2015 Sergey Sokolov, License MIT
 
 """
-Will open editor and new xterm window for unit tests to be run in a loop.
-Unit tests will be run each time project is updated and saved..
+Will open up the default editor and new xterm window for unit tests to be run
+in a loop. Unit tests will be run each time project is updated and saved.
 
 """
 
