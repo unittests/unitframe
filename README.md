@@ -18,8 +18,8 @@ Programming languages supported:
 - C++ (Windows MinGW only)
 
 It is recommended to use following unit testing libraries with UnitFrame:
-- Python - [Unittest](https://docs.python.org/3/library/unittest.html) native library
-- C++ - [Cppunit](http://cppunit.github.io/cppunit/)
+- Python - [Unittest](https://docs.python.org/3/library/unittest.html) from Python standard library
+- C++ - [Cppunit](http://cppunit.github.io/cppunit/) C++ Unit testing TDD framework
 
 ## unitframe.py - Runs unit tests in a loop
 Will open up default editor and new xterm window for unit tests to be run in a loop. Unit tests will be run each time the project is updated and saved.
