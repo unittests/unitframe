@@ -150,7 +150,7 @@ int main(int argc, char *argv[]) {
     if (argc > 1 && !strcmp(argv[1], "-ut"))
         return (new MyCppunit)->run();
 
-    cout << (new __Class__)->calculate() << endl;
+    cout << (new __Class__)->calculate();
     return 0;
 }
 
