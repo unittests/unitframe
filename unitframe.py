@@ -94,6 +94,8 @@ class Unitframe:
             ext = filename_ext(self.CFG_TYPES[self.args.type])
             if not re.match(".*\." + ext + "$", self.args.proj):
                 self.args.proj += "." + ext
+                # Check for existing file one more time
+                self.is_new = not os.path.exists(self.args.proj)
 
         # Project language and extension
         self.language = self.CFG_EXTS[filename_ext(self.args.proj)]
