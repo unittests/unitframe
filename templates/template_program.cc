@@ -68,6 +68,7 @@ class MyCppunit: public Cppunit {
 };
 
 int main() {
+    // Unit tests: -ut
     return (new MyCppunit)->run();
 }
 
