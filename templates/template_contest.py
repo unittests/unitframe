@@ -23,10 +23,11 @@ class __Class__:
         # Reading single elements
         [self.n, self.m] = map(int, uinput().split())
 
-        # Reading multiple lines of pairs
-        pairs = (" ".join(uinput() for i in range(self.n))).split()
-        self.numa = [int(pairs[i]) for i in range(0, 2*self.n, 2)]
-        self.numb = [int(pairs[i]) for i in range(1, 2*self.n, 2)]
+        # Reading multiple number of lines of the same number of elements each
+        l, s = self.n, 2
+        inp = (" ".join(uinput() for i in range(l))).split()
+        self.numm = [[int(inp[i]) for i in range(j, l*s, s)] for j in range(s)]
+        self.numa, self.numb = self.numm
 
         # Reading a single line of multiple elements
         self.nums = list(map(int, uinput().split()))
