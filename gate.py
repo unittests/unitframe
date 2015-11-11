@@ -1,7 +1,6 @@
-#!/usr/bin/env python
-# gate.py - User's commit gating script
-#
-# Copyright (C) 2015 Sergey Sokolov, License MIT
+#!/usr/bin/env python3
+# gate.py - User's commit gating script by Sergey 2015
+# UnitFrame - Unit testing TDD framework (github.com/unitframe/unitframe)
 
 """
 Searches for all files supporting unit testing (-ut option) in the specified

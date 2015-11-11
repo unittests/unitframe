@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # __Filename__ - __Class__ script by __User__ __Year__
 
 """

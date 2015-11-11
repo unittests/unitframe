@@ -1,7 +1,6 @@
-#!/usr/bin/env python
-# unitframe.py - Runs unit tests in a loop
-#
-# Copyright (C) 2013-2015 Sergey Sokolov, License MIT
+#!/usr/bin/env python3
+# unitframe.py - Runs unit tests in a loop by Sergey 2015
+# UnitFrame - Unit testing TDD framework (github.com/unitframe/unitframe)
 
 """
 Will open up the default editor and new xterm window for unit tests to be run

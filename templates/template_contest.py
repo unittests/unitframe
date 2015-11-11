@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # __Filename__ -__Contest__ by __User__ __Year__
 
 import unittest
