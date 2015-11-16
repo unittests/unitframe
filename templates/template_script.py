@@ -6,7 +6,7 @@
 
 """
 
-# Standard modules
+# Modules
 import unittest
 import sys
 import os
@@ -16,8 +16,6 @@ import random
 import subprocess
 import getpass
 import shutil
-
-# Additional modules
 
 
 ###############################################################################

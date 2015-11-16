@@ -8,7 +8,7 @@ in a loop. Unit tests will be run each time project is updated and saved.
 
 """
 
-# Standard modules
+# Modules
 import unittest
 import sys
 import os
@@ -17,8 +17,6 @@ import re
 import random
 import getpass
 import shutil
-
-# Additional modules
 import datetime
 import time
 

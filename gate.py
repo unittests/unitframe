@@ -8,7 +8,7 @@ directory and runs them one by one. All tests must pass for gate script to
 exit normally.
 """
 
-# Standard modules
+# Modules
 import unittest
 import sys
 import os
@@ -18,8 +18,6 @@ import random
 import subprocess
 import getpass
 import shutil
-
-# Additional modules
 import time
 
 ###############################################################################
