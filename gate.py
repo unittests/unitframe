@@ -35,6 +35,12 @@ class Gate:
     CFG_CPP_OPTS = "-std=c++11"
     CFG_EXTS = {"py": PYTHON, "cc": CPP, "": EXEC}
 
+    # XTerm colors
+    XC_BOLD = '\033[1m'
+    XC_RED = '\033[91m' + XC_BOLD
+    XC_GRN = '\033[92m' + XC_BOLD
+    XC_ENDC = '\033[0m'
+
     def __init__(self, arg_str=""):
         """ Default constructor """
 
@@ -104,10 +110,10 @@ class Gate:
         print("\nGATE: Elapsed Time " + str(round(elp_time, 3)) + "s")
 
         if fail:
-            print("GATE: FAILED!")
+            print("GATE: " + self.XC_RED + "FAILED!" + self.XC_ENDC)
             exit(1)
         else:
-            print("GATE: ALL TESTS PASSED!")
+            print("GATE: " + self.XC_GRN + "ALL TESTS PASSED!" + self.XC_ENDC)
 
 
 ###############################################################################

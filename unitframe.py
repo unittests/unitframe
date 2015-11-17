@@ -355,9 +355,9 @@ class unitTests(unittest.TestCase):
         else:
             self.assertEqual(
                 f.cmd, "xterm " + f.CFG_X_XTERM_OPT + " -T '" + proj +
-                "' -e \"$EDITOR " + proj + " &; " + sys.argv[0] +
+                "' -e \"$EDITOR " + proj + " ; " + sys.argv[0] +
                 " " + proj + " -arg arg -pre pre" +
-                " -xterm; csh\"&")
+                " -xterm; $SHELL\"&")
 
         proj = self.tmp_file + "_xcmd"
         f = Unitframe(proj + " -x -arg arg -pre pre")
