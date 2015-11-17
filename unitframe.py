@@ -354,7 +354,7 @@ class unitTests(unittest.TestCase):
                 " " + proj + " -arg arg -pre pre -xterm")
         else:
             self.assertEqual(
-                f.cmd, "xterm " + f.XTERM_OPT + " -T '" + proj +
+                f.cmd, "xterm " + f.CFG_X_XTERM_OPT + " -T '" + proj +
                 "' -e \"$EDITOR " + proj + " &; " + sys.argv[0] +
                 " " + proj + " -arg arg -pre pre" +
                 " -xterm; csh\"&")

@@ -83,7 +83,8 @@ class Gate:
                 if language == self.PYTHON:
 
                     # Run Python files
-                    if os.system("python " + filename + " -ut"):
+                    EXE = "python " if os.name == "nt" else ""
+                    if os.system(EXE + filename + " -ut"):
                         fail = 1
 
                 elif language == self.CPP:
