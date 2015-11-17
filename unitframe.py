@@ -34,7 +34,7 @@ class Unitframe:
 
     # Configuration
     CFG_UPDATE_PERIOD = .5
-    CFG_X_XTERM_OPT = "+aw -bg darkgreen -fg white -geometry 70x20+0+200"
+    CFG_X_XTERM_OPT = "+aw -bg darkgreen -fg white -geometry 70x20+100+200"
     CFG_CPP_OPTS = "-std=c++11"
     CFG_CPP_DEBUG_OPTS = (
         "-Wall -Wextra -pedantic -O2 -Wshadow -Wformat=2 " +
@@ -182,7 +182,7 @@ class Unitframe:
             else:
                 self.cmd += (
                     "xterm " + self.CFG_X_XTERM_OPT + " -T '" + filename +
-                    "' -e \"" + editor_cmd + " &; " + frame_cmd + "; csh\"&")
+                    "' -e \"" + editor_cmd + " ; " + frame_cmd + "; $SHELL\"&")
 
     def run(self, test=False):
         """ Main execution function """
