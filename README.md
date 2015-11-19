@@ -4,16 +4,16 @@ Unit testing TDD framework for the rapid source code development and verificatio
 Components:
 - [unitframe.py](unitframe.py)  - Main tool, runs unit tests in a loop
 - [gate.py](gate.py)            - User's commit gating tool
-- [templates/](templates)       - Templates directory for new projects/scripts 
+- [templates/](templates)       - Templates directory for new projects/scripts
 - [checks/](checks)             - Source code lint checks (currently only [Pep8](https://www.python.org/dev/peps/pep-0008/) for Python)
 
 ## License
-MIT License. For more information, please refer to [LICENSE](LICENSE)
+Public Domain. For more information, please refer to http://unlicense.org
 
 ## Usage requirements
 Each program has to support `-ut` command line switch which is used to enable unit testing mode of a program (always enabled is okay).
 
-Programming languages supported: 
+Programming languages supported:
 - Python (Windows/Linux)
 - C++ (Windows MinGW only)
 
