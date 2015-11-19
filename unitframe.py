@@ -130,7 +130,8 @@ class Unitframe:
             replace_file("__Contest__", contest, filename)
 
         replace_file("__Filename__", filename, filename)
-        replace_file("__Class__", proj_name.capitalize(), filename)
+        replace_file("__Class__",
+            proj_name[0].upper() + proj_name[1:], filename)
 
         date = datetime.date.today().strftime('%d/%m/%Y')
         replace_file("__Date__", date, filename)
