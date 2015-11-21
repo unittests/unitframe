@@ -67,7 +67,7 @@ class Unitframe:
             "-type", action="store", default="p",
             help="New project template (default p): " +
             ", ".join(sorted(
-                [v + " " + self.CFG_TYPES[v] for v in self.CFG_TYPES])))
+                [t + " (" + f + ")" for t, f in self.CFG_TYPES.items()])))
         parser.add_argument(
             "-xterm", action="store_true", default="", help="Xterm mode")
         parser.add_argument(
