@@ -1,4 +1,4 @@
-// __Filename__ -__Contest__ by __User__ __Year__
+// __Filename__ - __CF_Contest__ by __User__ __Year__
 
 #include <bits/stdc++.h>
 using namespace std;

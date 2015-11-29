@@ -46,7 +46,8 @@ class Unitframe:
         "p":   "template_program.py",
         "pc":  "template_program.cc",
         "cf":  "template_contest.py",
-        "cfc": "template_contest.cc"}
+        "cfc": "template_contest.cc",
+        "ct":  "template_contest_tc.py"}
 
     # Command constants
     IS_WIN = (os.name == "nt")
@@ -111,7 +112,7 @@ class Unitframe:
 
         # Contest replacement
         # NOTE: Needs to happen before Class replacement
-        if search_file("__Contest__", filename):
+        if search_file("__CF_Contest__", filename):
 
             allmatch = re.match("^([^_]*)_(.*)$", proj_name)
             if allmatch:
@@ -122,16 +123,29 @@ class Unitframe:
 
             proj_name = self.cont_project
 
-            contest = " Codeforces.com/problemset/problem/"
+            contest = "Codeforces.com/problemset/problem/"
             m = re.search("(\d+)(\w)", self.cont_num)
             if not m:
                 raise Exception("Wrong contest format " + self.cont_num)
             contest += m.group(1) + "/" + m.group(2)
-            replace_file("__Contest__", contest, filename)
+            replace_file("__CF_Contest__", contest, filename)
+
+        if search_file("__TC_Contest__", filename):
+            allmatch = re.match("^([^_]*)_(.*)$", proj_name)
+            if allmatch:
+                self.cont_num = allmatch.group(1)
+                self.cont_project = allmatch.group(2)
+            else:
+                raise Exception("Expected contest num as a prefix")
+
+            proj_name = self.cont_project
+
+            contest = "Topcoder.com " + self.cont_num + " problem"
+            replace_file("__TC_Contest__", contest, filename)
 
         replace_file("__Filename__", filename, filename)
         replace_file("__Class__",
-            proj_name[0].upper() + proj_name[1:], filename)
+                     proj_name[0].upper() + proj_name[1:], filename)
 
         date = datetime.date.today().strftime('%d/%m/%Y')
         replace_file("__Date__", date, filename)

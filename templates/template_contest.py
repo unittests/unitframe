@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# __Filename__ -__Contest__ by __User__ __Year__
+# __Filename__ - __CF_Contest__ by __User__ __Year__
 
 import unittest
 import sys
