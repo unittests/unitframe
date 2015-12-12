@@ -35,11 +35,14 @@ class Gate:
     CFG_CPP_OPTS = "-std=c++11"
     CFG_EXTS = {"py": PYTHON, "cc": CPP, "": EXEC}
 
+    # OS setting
+    IS_WIN = (os.name == "nt")
+
     # XTerm colors
-    XC_BOLD = '\033[1m'
-    XC_RED = '\033[91m' + XC_BOLD
-    XC_GRN = '\033[92m' + XC_BOLD
-    XC_ENDC = '\033[0m'
+    XC_BOLD = '\033[1m' if not IS_WIN else ''
+    XC_RED = '\033[91m' + XC_BOLD if not IS_WIN else ''
+    XC_GRN = '\033[92m' + XC_BOLD if not IS_WIN else ''
+    XC_ENDC = '\033[0m' if not IS_WIN else ''
 
     def __init__(self, arg_str=""):
         """ Default constructor """
