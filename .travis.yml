@@ -1,0 +1,9 @@
+script:
+  - unitframe.py -ut
+  - gate.py -ut
+  - templates/template_contest.py -ut
+  - templates/template_contest_tc.py -ut
+  - templates/template_program.py -ut
+  - templates/template_script.py -ut
+
+

@@ -1,4 +1,4 @@
-# UnitFrame
+# UnitFrame [![Build Status](https://travis-ci.org/UnitFrame/unitframe.svg?branch=master)](https://travis-ci.org/UnitFrame/unitframe)
 Unit testing TDD framework for the rapid source code development and verification. It was developed primarily for Python programming language, but C++ is also supported.
 
 Components:
