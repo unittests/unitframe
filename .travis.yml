@@ -1,14 +1,25 @@
+sudo: required
+dist: precise
 language: 
   - python
   - cpp
-compiler: gcc
-env: GCC_VERSION=5
 python: 
   - "3.4"
 script:
   - ./unitframe.py -ut
   - ./gate.py -ut
   - ./gate.py
+
+matrix:
+  include:
+    - compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env: COMPILER=g++-5
 
 notifications:
   email: true
