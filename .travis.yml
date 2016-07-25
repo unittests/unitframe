@@ -1,9 +1,10 @@
+language: python
+python: 
+  - "3.4"
 script:
-  - unitframe.py -ut
-  - gate.py -ut
-  - templates/template_contest.py -ut
-  - templates/template_contest_tc.py -ut
-  - templates/template_program.py -ut
-  - templates/template_script.py -ut
+  - ./unitframe.py -ut
+  - ./gate.py -ut
+  - ./gate.py
+
 
 
