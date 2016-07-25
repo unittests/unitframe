@@ -1,7 +1,5 @@
 sudo: required
 
-dist: precise
-
 language: 
   - python
   - cpp
@@ -14,8 +12,6 @@ script:
   - ./gate.py -ut
   - ./gate.py
 
-compiler: gcc
-
 addons:
   apt:
     sources:
@@ -23,7 +19,9 @@ addons:
     packages:
       - g++-5
 
-env: COMPILER=g++-5
+before_install:
+  - sudo unlink /usr/bin/g++ && sudo ln -s /usr/bin/g++-5 /usr/bin/g++
+  - g++ --version
 
 notifications:
   email: true
