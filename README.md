@@ -8,7 +8,7 @@ Components:
 - [checks/](checks)             - Source code lint checks (currently only [Pep8](https://www.python.org/dev/peps/pep-0008/) for Python)
 
 ## License
-Public Domain. For more information, please refer to http://unlicense.org
+This is free and unencumbered software released into the public domain. For more information, please refer to http://unlicense.org
 
 ## Usage requirements
 Each program has to support `-ut` command line switch which is used to enable unit testing mode of a program (always enabled is okay).
