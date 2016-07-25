@@ -1,4 +1,7 @@
-language: python
+language: 
+  - python
+  - cpp
+compiler: gcc
 python: 
   - "3.4"
 script:
