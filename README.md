@@ -70,6 +70,6 @@ GATE: ALL TESTS PASSED!
 ## Templates for new projects
 
 New project templates available:
-- Basic script template `-type c` - source [Python](templates/template_script.py)
-- Program teplate `-type p/pc` - source [Python](templates/template_program.py), [C++](templates/template_program.cc)
-- Contest solution template `-type cf/cfc` - source [Python](templates/template_contest.py), [C++](templates/template_contest.cc)
+- Basic script template `-type c` - source [Python](https://github.com/UnitFrame/unitframe/blob/master/templates/template_script.py)
+- Program teplate `-type p/pc` - source [Python](https://github.com/UnitFrame/unitframe/blob/master/templates/template_program.py), [C++](https://github.com/UnitFrame/unitframe/blob/master/templates/template_program.cc)
+- Contest solution template `-type cf/cfc` - source [Python](https://github.com/UnitFrame/unitframe/blob/master/templates/template_contest.py), [C++](https://github.com/UnitFrame/unitframe/blob/master/templates/template_contest.cc)
