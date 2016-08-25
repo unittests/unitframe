@@ -2,10 +2,10 @@
 Unit testing TDD framework for the rapid source code development and verification. It was developed primarily for Python programming language, but C++ is also supported.
 
 Components:
-- [unitframe.py](unitframe.py)  - Main tool, runs unit tests in a loop
-- [gate.py](gate.py)            - User's commit gating tool
-- [templates/](templates)       - Templates directory for new projects/scripts
-- [checks/](checks)             - Source code lint checks (currently only [Pep8](https://www.python.org/dev/peps/pep-0008/) for Python)
+- [unitframe.py](https://github.com/UnitFrame/unitframe/blob/master/unitframe.py)  - Main tool, runs unit tests in a loop
+- [gate.py](https://github.com/UnitFrame/unitframe/blob/master/gate.py)            - User's commit gating tool
+- [templates/](https://github.com/UnitFrame/unitframe/blob/master/templates)       - Templates directory for new projects/scripts
+- [checks/](https://github.com/UnitFrame/unitframe/blob/master/checks)             - Source code lint checks (currently only [Pep8](https://www.python.org/dev/peps/pep-0008/) for Python)
 
 ## License
 This is free and unencumbered software released into the public domain. For more information, please refer to http://unlicense.org
