@@ -19,7 +19,7 @@ Programming languages supported:
 
 It is recommended to use following unit testing libraries with UnitFrame:
 - Python - [Unittest](https://docs.python.org/3/library/unittest.html) from Python standard library
-- C++ - [Cppunit](http://cppunit.github.io/cppunit/) C++ Unit testing TDD framework
+- C++ - [Cppunit](https://github.com/cppunit/cppunit) C++ Unit testing TDD framework
 
 ## unitframe.py - Runs unit tests in a loop
 Will open up default editor and new xterm window for unit tests to be run in a loop. Unit tests will be run each time the project is updated and saved.
@@ -42,7 +42,7 @@ optional arguments:
   -args ARGS  Passing argument to the Project
 ```
 
-UnitFrame launching GVIM and terminal window with one [Cppunit](http://cppunit.github.io/cppunit/) unit test failing after executing the following command:
+UnitFrame launching GVIM and terminal window with one [Cppunit](https://github.com/cppunit/cppunit) unit test failing after executing the following command:
 
 `> unitframe 574D_blocks.cc`
 
