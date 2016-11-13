@@ -2,10 +2,10 @@
 Unit testing TDD framework for the rapid source code development and verification. It was developed primarily for Python programming language, but C++ is also supported.
 
 Components:
-- [unitframe.py](unitframe.py)  - Main tool, runs unit tests in a loop
-- [gate.py](gate.py)            - User's commit gating tool
-- [templates/](templates)       - Templates directory for new projects/scripts
-- [checks/](checks)             - Source code lint checks (currently only [Pep8](https://www.python.org/dev/peps/pep-0008/) for Python)
+- [unitframe.py](https://github.com/UnitFrame/unitframe/blob/master/unitframe.py)  - Main tool, runs unit tests in a loop
+- [gate.py](https://github.com/UnitFrame/unitframe/blob/master/gate.py)            - User's commit gating tool
+- [templates/](https://github.com/UnitFrame/unitframe/blob/master/templates)       - Templates directory for new projects/scripts
+- [checks/](https://github.com/UnitFrame/unitframe/blob/master/checks)             - Source code lint checks (currently only [Pep8](https://www.python.org/dev/peps/pep-0008/) for Python)
 
 ## License
 This is free and unencumbered software released into the public domain. For more information, please refer to http://unlicense.org
@@ -19,7 +19,7 @@ Programming languages supported:
 
 It is recommended to use following unit testing libraries with UnitFrame:
 - Python - [Unittest](https://docs.python.org/3/library/unittest.html) from Python standard library
-- C++ - [Cppunit](http://cppunit.github.io/cppunit/) C++ Unit testing TDD framework
+- C++ - [Cppunit](https://github.com/cppunit/cppunit) C++ Unit testing TDD framework
 
 ## unitframe.py - Runs unit tests in a loop
 Will open up default editor and new xterm window for unit tests to be run in a loop. Unit tests will be run each time the project is updated and saved.
@@ -42,7 +42,7 @@ optional arguments:
   -args ARGS  Passing argument to the Project
 ```
 
-UnitFrame launching GVIM and terminal window with one [Cppunit](http://cppunit.github.io/cppunit/) unit test failing after executing the following command:
+UnitFrame launching GVIM and terminal window with one [Cppunit](https://github.com/cppunit/cppunit) unit test failing after executing the following command:
 
 `> unitframe 574D_blocks.cc`
 
@@ -70,6 +70,6 @@ GATE: ALL TESTS PASSED!
 ## Templates for new projects
 
 New project templates available:
-- Basic script template `-type c` - source [Python](templates/template_script.py)
-- Program teplate `-type p/pc` - source [Python](templates/template_program.py), [C++](templates/template_program.cc)
-- Contest solution template `-type cf/cfc` - source [Python](templates/template_contest.py), [C++](templates/template_contest.cc)
+- Basic script template `-type c` - source [Python](https://github.com/UnitFrame/unitframe/blob/master/templates/template_script.py)
+- Program teplate `-type p/pc` - source [Python](https://github.com/UnitFrame/unitframe/blob/master/templates/template_program.py), [C++](https://github.com/UnitFrame/unitframe/blob/master/templates/template_program.cc)
+- Contest solution template `-type cf/cfc` - source [Python](https://github.com/UnitFrame/unitframe/blob/master/templates/template_contest.py), [C++](https://github.com/UnitFrame/unitframe/blob/master/templates/template_contest.cc)
