@@ -1,10 +1,10 @@
 sudo: required
 
-language: 
+language:
   - python
   - cpp
 
-python: 
+python:
   - "3.4"
 
 script:
