@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# unitframe.py - Runs unit tests in a loop by Sergey 2015
+# uframe.py - Runs unit tests in a loop by Sergey 2015
 # UnitFrame - Unit testing TDD framework (github.com/unitframe/unitframe)
 
 """
